@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="college">
+        <item>KDO</item>
+        <item>KAB</item>
+        <item>KUO</item>
+        <item>KBH</item>
+        <item>KIY</item>
+        <item>KRK</item>
+        <item>KIZ</item>
+        <item>KKM</item>
+        <item>KPZ</item>
+        <item>KTHO</item>
+        <item>KTDI</item>
+    </string-array>
+
+    <string-array name="faculty">
+        <item>FSSK</item>
+        <item>FST</item>
+        <item>FEP</item>
+        <item>FPI</item>
+        <item>FKAB</item>
+        <item>FUU</item>
+        <item>FPEND</item>
+        <item>FTSM</item>
+    </string-array>
+
+    <string-array name="restaurant">
+        <item>Al_Faris Maju</item>
+        <item>Ming Ming Rice Shop</item>
+        <item>Da Shu Xia</item>
+        <item>Mohd Chan</item>
+    </string-array>
+
+    <string-array name="places">
+        <item>Dectar</item>
+        <item>Pusanika</item>
+        <item>KDO</item>
+        <item>KAB</item>
+        <item>KUO</item>
+        <item>KBH</item>
+        <item>KIY</item>
+        <item>KRK</item>
+        <item>KIZ</item>
+        <item>KKM</item>
+        <item>KPZ</item>
+        <item>KTHO</item>
+        <item>KTDI</item>
+        <item>FSSK</item>
+        <item>FST</item>
+        <item>FEP</item>
+        <item>FPI</item>
+        <item>FKAB</item>
+        <item>FUU</item>
+        <item>FPEND</item>
+        <item>FTSM</item>
+    </string-array>
+
+    <string-array name="foodHunterList">
+        <item>ConnieChin96</item>
+        <item>Jacky Lim</item>
+        <item>Abdullah</item>
+        <item>Faris</item>
+    </string-array>
+
+    <string-array name="foodTag">
+        <item>Halal</item>
+        <item>Non Halal</item>
+        <item>Vegetarian</item>
+        <item>Chinese Cuisine</item>
+        <item>Malay Cuisine</item>
+        <item>Indian Cuisine</item>
+        <item>Western Cuisine</item>
+        <item>Mamak Cuisine</item>
+        <item>Thai Cuisine</item>
+        <item>Korean Cuisine</item>
+        <item>Japan Cuisine</item>
+    </string-array>
+
+</resources>

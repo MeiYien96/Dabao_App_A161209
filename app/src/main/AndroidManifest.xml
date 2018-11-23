@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.cmy.dabao_app_a161209">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".login" />
+        <activity android:name=".signup" />
+        <activity
+            android:name=".hunter_mainmenu"
+            android:label="@string/title_activity_hunter_mainmenu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Preorder" />
+        <activity android:name=".Preorder_add" />
+        <activity android:name=".Preorder_edit" />
+        <activity android:name=".Restaurant_available" />
+        <activity android:name=".Restaurant_viewmenu" />
+        <activity
+            android:name=".Popup_confirmation"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".Popup_order"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".Food_tracking" />
+        <activity android:name=".Thanks" />
+        <activity
+            android:name=".driver_mainmenu"
+            android:label="@string/title_activity_driver_mainmenu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Preorder_request" />
+        <activity android:name=".Driver_Setting" />
+        <activity android:name=".Hunter_Setting" />
+        <activity android:name=".Preorder_request_view" />
+        <activity android:name=".Add_restaurant" />
+        <activity android:name=".Generate_order_details" />
+        <activity android:name=".Delivery_Process" />
+        <activity android:name=".Thanks_driver"></activity>
+    </application>
+
+</manifest>
