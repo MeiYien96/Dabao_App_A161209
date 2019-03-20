@@ -25,24 +25,17 @@
 
     <TextView
         android:id="@+id/textView42"
-        android:layout_width="362dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="92dp"
+        android:layout_width="308dp"
+        android:layout_height="147dp"
+        android:layout_marginTop="40dp"
         android:gravity="center"
         android:text="Thanks for providing awesome services to user! Happy Earning!"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView14"
-        app:layout_constraintVertical_bias="0.265" />
+        app:layout_constraintEnd_toEndOf="@+id/imageView14"
+        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintStart_toStartOf="@+id/imageView14"
+        app:layout_constraintTop_toBottomOf="@+id/imageView14" />
 
     <Button
         android:id="@+id/btn_rateus"
@@ -60,9 +53,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView42"
-        app:layout_constraintVertical_bias="0.642" />
+        app:layout_constraintVertical_bias="0.321" />
 
     <Button
         android:id="@+id/btn_mainmenu"
@@ -80,7 +74,8 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_rateus"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.391" />
 </android.support.constraint.ConstraintLayout>

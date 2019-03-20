@@ -10,5 +10,7 @@
     <string name="title_activity_driver_mainmenu">driver_mainmenu</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="google_map_api_key">AIzaSyAZbvhhZ0JJfBCHI4gB7lJJhCfzhUMCiLA</string>
+    <string name="title_activity_driver_maps">Map</string>
 
 </resources>

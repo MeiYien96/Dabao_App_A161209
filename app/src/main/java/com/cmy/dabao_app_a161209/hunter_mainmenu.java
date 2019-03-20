@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 public class hunter_mainmenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Button btnCancel, btnPreorder,btnSetting;
+    EditText etLocation;
     TextView tvHunt;
     AnimationDrawable animation;
     //ImageView ivLoading;
@@ -39,10 +41,11 @@ public class hunter_mainmenu extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnPreorder = findViewById(R.id.btn_preorder);
+       // btnPreorder = findViewById(R.id.btn_preorder);
         btnCancel = findViewById(R.id.btn_cancel);
         tvHunt = findViewById(R.id.tv_hunt);
         btnSetting = findViewById(R.id.btn_setting);
+        etLocation = findViewById(R.id.et_location);
 
         //ivLoading = findViewById(R.id.iv_loading);
         //ImageView loading = (ImageView)findViewById(R.id.iv_loading);
@@ -71,13 +74,13 @@ public class hunter_mainmenu extends AppCompatActivity
         });
 
 
-        btnPreorder.setOnClickListener(new View.OnClickListener() {
+       /* btnPreorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                Intent intent = new Intent(hunter_mainmenu.this, Preorder.class);
                startActivity(intent);
             }
-        });
+        });*/
 
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,9 +126,9 @@ public class hunter_mainmenu extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -149,11 +152,11 @@ public class hunter_mainmenu extends AppCompatActivity
             /*case R.id.nav_home:
                 fragment = new Setting_Fragment();
                 break;*/
-            case R.id.nav_preorder:
+            /*case R.id.nav_preorder:
                 Intent intent = new Intent(hunter_mainmenu.this, Preorder_request.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                break;
+                break;*/
             /*case R.id.nav_setting:
                 fragment = new Setting_Fragment();
                 break;

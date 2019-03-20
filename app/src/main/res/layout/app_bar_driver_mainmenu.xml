@@ -6,11 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".driver_mainmenu">
 
+    <fragment
+        android:id="@+id/driver_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapsActivity"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_width="439dp"
+        android:layout_height="64dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        tools:layout_editor_absoluteX="-18dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -21,7 +32,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_driver_mainmenu" />
+    <include
+        android:id="@+id/include2"
+        layout="@layout/content_driver_mainmenu"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="359dp" />
 
     <TextView
         android:id="@+id/tv_having"
@@ -63,25 +78,14 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_having"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/iv_addrestaurant"
-        android:layout_width="51dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toEndOf="@+id/et_location"
-        app:layout_constraintTop_toBottomOf="@+id/tv_having"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_add_box_black_24dp" />
-
-    <ImageView
+    <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        tools:context=".MapsActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />-->
+    <!--<ImageView
         android:id="@+id/iv_map"
         android:layout_width="334dp"
         android:layout_height="310dp"
@@ -98,7 +102,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_location"
         app:layout_constraintVertical_bias="0.023"
-        app:srcCompat="@drawable/driver_map" />
+        app:srcCompat="@drawable/driver_map" /> -->
 
     <Button
         android:id="@+id/btn_delivery"
@@ -106,17 +110,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="40dp"
         android:background="@color/colorPrimary"
         android:text="Ready For Deliver"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_map" />
+        app:layout_constraintHorizontal_bias="0.373"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/iv_order"
@@ -124,15 +127,14 @@
         android:layout_height="43dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintHorizontal_bias="0.584"
         app:layout_constraintStart_toEndOf="@+id/btn_delivery"
-        app:layout_constraintTop_toBottomOf="@+id/iv_map"
         app:srcCompat="@drawable/ic_library_books_black_24dp" />
+
 
 </android.support.constraint.ConstraintLayout>

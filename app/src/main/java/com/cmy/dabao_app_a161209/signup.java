@@ -44,7 +44,7 @@ public class signup extends Activity {
 
         btnSignup = findViewById(R.id.btn_signup);
         etMail = findViewById(R.id.et_mail);
-        etUsername = findViewById(R.id.et_mail);
+        etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.etpassword);
         etPhone = findViewById(R.id.et_phone);
         tvLogin = findViewById(R.id.tv_login);

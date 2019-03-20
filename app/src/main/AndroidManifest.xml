@@ -2,6 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cmy.dabao_app_a161209">
 
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +22,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_map_api_key" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,11 +48,7 @@
             android:name=".hunter_mainmenu"
             android:label="@string/title_activity_hunter_mainmenu"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Preorder" />
-        <activity android:name=".Preorder_add" />
-        <activity android:name=".Preorder_edit" />
         <activity android:name=".Restaurant_available" />
-        <activity android:name=".Restaurant_viewmenu" />
         <activity
             android:name=".Popup_confirmation"
             android:theme="@style/AppTheme.CustomTheme" />
@@ -39,14 +61,19 @@
             android:name=".driver_mainmenu"
             android:label="@string/title_activity_driver_mainmenu"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Preorder_request" />
         <activity android:name=".Driver_Setting" />
         <activity android:name=".Hunter_Setting" />
-        <activity android:name=".Preorder_request_view" />
-        <activity android:name=".Add_restaurant" />
         <activity android:name=".Generate_order_details" />
         <activity android:name=".Delivery_Process" />
-        <activity android:name=".Thanks_driver"></activity>
+        <activity android:name=".Thanks_driver" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>

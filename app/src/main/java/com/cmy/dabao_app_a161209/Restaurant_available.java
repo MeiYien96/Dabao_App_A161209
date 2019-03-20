@@ -20,13 +20,13 @@ public class Restaurant_available extends AppCompatActivity {
         btnOrder = findViewById(R.id.btn_takeorder);
         ivNotice = findViewById(R.id.iv_notice);
 
-        btnViewMenu.setOnClickListener(new View.OnClickListener() {
+        /*btnViewMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Restaurant_available.this, Restaurant_viewmenu.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
