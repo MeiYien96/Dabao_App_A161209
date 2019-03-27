@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,11 +32,17 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 
 public class driver_mainmenu extends  AppCompatActivity
@@ -48,6 +55,8 @@ implements NavigationView.OnNavigationItemSelectedListener , OnMapReadyCallback 
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
+    private FirebaseFirestore mDb;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +65,12 @@ implements NavigationView.OnNavigationItemSelectedListener , OnMapReadyCallback 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.driver_map);
         mapFragment.getMapAsync(this);
-
         checkMapServices();
+        mDb = FirebaseFirestore.getInstance();
 
         btnDelivery = findViewById(R.id.btn_delivery);
         ivGenerateOrder = findViewById(R.id.iv_order);
@@ -142,21 +152,13 @@ implements NavigationView.OnNavigationItemSelectedListener , OnMapReadyCallback 
             /*case R.id.nav_home:
                 fragment = new Setting_Fragment();
                 break;
-            case R.id.nav_preorder:
-                fragment = new Setting_Fragment();
-                break;
             case R.id.nav_setting:
-                fragment = new Setting_Fragment();
-                break;
-            case R.id.nav_support:
                 fragment = new Setting_Fragment();
                 break;
             case R.id.nav_bedriver:
                 fragment = new Setting_Fragment();
                 break;
-            case R.id.nav_rateus:
-                fragment = new Setting_Fragment();
-                break;*/
+            */
         }
 
         //replacing the fragment
@@ -171,6 +173,23 @@ implements NavigationView.OnNavigationItemSelectedListener , OnMapReadyCallback 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    private void getLastKnownLocation(){
+        Log.d(TAG, "getLastKnownLocation: called.");
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+
+                if(task.isSuccessful()){
+                    Location location = task.getResult();
+                    GeoPoint geoPoint = new GeoPoint( location.getLatitude(),location.getLongitude());
+                    Log.d(TAG, "onCompleted: Latitude: "+ geoPoint.getLatitude());
+                    Log.d(TAG, "onCompleted: Latitude: "+ geoPoint.getLongitude());
+                }
+
+            }
+        });
     }
 
     //for map and location permission
@@ -218,6 +237,7 @@ implements NavigationView.OnNavigationItemSelectedListener , OnMapReadyCallback 
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
             //getChatrooms();
+            getLastKnownLocation();;
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -270,6 +290,7 @@ implements NavigationView.OnNavigationItemSelectedListener , OnMapReadyCallback 
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
                 if(mLocationPermissionGranted){
                     //getChatrooms();
+                    getLastKnownLocation();
                 }
                 else{
                     getLocationPermission();
