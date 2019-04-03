@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,15 +28,16 @@ public class Hunter_Setting extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_setting_);
+        setContentView(R.layout.activity_hunter__setting);
 
+        btnSave = findViewById(R.id.btn_save);
         btnEdit = findViewById(R.id.btn_edit);
         etUsername = findViewById(R.id.et_username);
         etMatrix = findViewById(R.id.et_matric);
         etPhone = findViewById(R.id.et_phone);
         etEmail = findViewById(R.id.et_email);
 
-        DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Food Hunter");
+        /*DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Food Hunter");
         df.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -50,7 +53,7 @@ public class Hunter_Setting extends Activity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
 
         btnSave.setOnClickListener(new View.OnClickListener() {

@@ -49,7 +49,7 @@ public class Popup_confirmation extends Activity {
         ImageView ivNotice;
         myDialog.setContentView(R.layout.activity_popup_confirmation);
 
-        ivNotice = (ImageView)myDialog.findViewById(R.id.iv_notice);
+        //ivNotice = (ImageView)myDialog.findViewById(R.id.iv_notice);
 
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();

@@ -1,50 +1,52 @@
 package com.cmy.dabao_app_a161209;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class Restaurant_available extends AppCompatActivity {
-    Button btnViewMenu, btnOrder;
-    ImageView ivNotice;
+import java.util.ArrayList;
+
+public class Restaurant_available extends Activity {
+
+    DatabaseReference reference;
+    RecyclerView recyclerView;
+    ArrayList<Restaurant_location> list;
+    Restaurant_adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_available);
 
-        btnViewMenu = findViewById(R.id.btn_viewmenu);
-        btnOrder = findViewById(R.id.btn_takeorder);
-        ivNotice = findViewById(R.id.iv_notice);
+        recyclerView = (RecyclerView)findViewById(R.id.my_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        /*btnViewMenu.setOnClickListener(new View.OnClickListener() {
+        list = new ArrayList<Restaurant_location>();
+
+        reference = FirebaseDatabase.getInstance().getReference().child("DriversAvailable");
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Restaurant_available.this, Restaurant_viewmenu.class);
-                startActivity(intent);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                    Restaurant_location r = dataSnapshot1.getValue(Restaurant_location.class);
+                    list.add(r);
+                }
+                adapter = new Restaurant_adapter(Restaurant_available.this, list);
+                recyclerView.setAdapter(adapter);
             }
-        });*/
 
-        btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I want to take order");
-                startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_using)));
-            }
-        });
-
-        ivNotice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Restaurant_available.this, Popup_confirmation.class));
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(Restaurant_available.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }

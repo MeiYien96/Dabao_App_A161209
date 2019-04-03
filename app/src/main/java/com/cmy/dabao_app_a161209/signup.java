@@ -33,7 +33,7 @@ public class signup extends Activity {
     RadioButton radioButton;
     FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
-    String email,username,password,phone,identity;
+    String email,username,password,phone,identity,matric,profilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +66,11 @@ public class signup extends Activity {
             @Override
             public void onClick(View view) {
                 username = etUsername.getText().toString().trim();
+                matric = "";
                 password = etPassword.getText().toString().trim();
                 email = etMail.getText().toString().trim();
                 phone = etPhone.getText().toString().trim();
+                profilePic = "";
 
                 radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
                 int selectedId = radioGroup.getCheckedRadioButtonId();
@@ -83,7 +85,7 @@ public class signup extends Activity {
                             if (task.isSuccessful()) {
                                 if(identity.equals("Food Hunter")){
 
-                                    User user = new User(username, email, phone,identity);
+                                    User user = new User(username,matric, email, phone,identity,profilePic);
                                     FirebaseDatabase.getInstance().getReference().child("Users").child("Food Hunter").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
@@ -99,7 +101,7 @@ public class signup extends Activity {
                                     });
                                 }
                                 else {
-                                    User user = new User(username, email, phone,identity);
+                                    User user = new User(username,matric, email, phone,identity,profilePic);
                                     FirebaseDatabase.getInstance().getReference().child("Users").child("Food Driver").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {

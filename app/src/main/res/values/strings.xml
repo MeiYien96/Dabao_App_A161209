@@ -10,7 +10,32 @@
     <string name="title_activity_driver_mainmenu">driver_mainmenu</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="google_map_api_key">AIzaSyAZbvhhZ0JJfBCHI4gB7lJJhCfzhUMCiLA</string>
     <string name="title_activity_driver_maps">Map</string>
+
+    <string-array name="restaurant_name">
+        <item>Restoran Al Fariz Maju</item>
+        <item>大树下饭店 Kedai Makan Kita</item>
+        <item>Mohammad Chan Restaurant</item>
+        <item>Hot Meal Bar</item>
+        <item>Restaurant homst</item>
+    </string-array>
+
+    <string-array name="college_name">
+        <item>Kolej Pendeta Za’ba</item>
+        <item>Kolej Burhanuddin Helmi</item>
+        <item>Kolej Keris Mas</item>
+        <item>Kolej Dato’Onn</item>
+        <item>Kolej Aminuddin Baki</item>
+        <item>Kolej Ungku Omar</item>
+        <item>Kolej Ibrahim Yaakub</item>
+        <item>Kolej Rahim Kajai</item>
+        <item>Kolej Ibu Zain</item>
+        <item>Kolej Tun Hussein Onn</item>
+    </string-array>
+
+    <!-- Firebase variable
+    <string name="collection_user_locations">User Locations</string>
+    <string name="collection_users">Users</string>
+    <string name="title_activity_maps">Map</string>-->
 
 </resources>

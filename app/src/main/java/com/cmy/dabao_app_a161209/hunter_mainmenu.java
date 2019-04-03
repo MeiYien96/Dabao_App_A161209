@@ -3,6 +3,7 @@ package com.cmy.dabao_app_a161209;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -18,21 +19,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class hunter_mainmenu extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    Button btnCancel, btnPreorder,btnSetting;
-    EditText etLocation;
-    TextView tvHunt;
-    AnimationDrawable animation;
-    //ImageView ivLoading;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class hunter_mainmenu extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+    Button btnHunt;
+    ActionBarDrawerToggle toggle;
+    int click = 0;
+    String selectedCollege;
+    Double rlongitude, rlatitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,52 +47,80 @@ public class hunter_mainmenu extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       // btnPreorder = findViewById(R.id.btn_preorder);
-        btnCancel = findViewById(R.id.btn_cancel);
-        tvHunt = findViewById(R.id.tv_hunt);
-        btnSetting = findViewById(R.id.btn_setting);
-        etLocation = findViewById(R.id.et_location);
+        btnHunt = findViewById(R.id.btn_hunt);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.pb_progressBar);
+        progressBar.setVisibility(View.GONE);
 
-        //ivLoading = findViewById(R.id.iv_loading);
-        //ImageView loading = (ImageView)findViewById(R.id.iv_loading);
-        //loading.setBackgroundResource(R.drawable.loading);
-        //animation = (AnimationDrawable)loading.getBackground();
+        final Spinner spinner = (Spinner) findViewById(R.id.spi_college);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.college_name, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
-        /*tvHunt.setOnClickListener(new View.OnClickListener() {
+
+        btnHunt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animation.start();
-            }
-        });
+                if(click == 0){
+                    progressBar.setVisibility(View.VISIBLE);
+                    selectedCollege = String.valueOf(spinner.getSelectedItem());
+                    if(selectedCollege.equals("Kolej Pendeta Za’ba")){
+                        rlatitude = 2.919514;
+                        rlongitude = 101.774489;
+                    }
+                    else if(selectedCollege.equals("Kolej Burhanuddin Helmi")){
+                        rlatitude = 2.927593;
+                        rlongitude = 101.776949;
+                    }
+                    else if(selectedCollege.equals("Kolej Keris Mas")){
+                        rlatitude = 2.926817;
+                        rlongitude = 101.789284;
+                    }
+                    else if(selectedCollege.equals("Kolej Dato’Onn")){
+                        rlatitude = 2.931418;
+                        rlongitude = 101.780544;
+                    }
+                    else if(selectedCollege.equals("Kolej Aminuddin Baki")){
+                        rlatitude = 2.924733;
+                        rlongitude = 101.783970;
+                    }
+                    else if(selectedCollege.equals("Kolej Ungku Omar")){
+                        rlatitude = 2.924727;
+                        rlongitude = 101.779836;
+                    }
+                    else if(selectedCollege.equals("Kolej Ibrahim Yaakub")){
+                        rlatitude = 2.924536;
+                        rlongitude = 101.778223;
+                    }
+                    else if(selectedCollege.equals("Kolej Rahim Kajai")){
+                        rlatitude = 2.932995;
+                        rlongitude = 101.783355;
+                    }
+                    else if(selectedCollege.equals("Kolej Ibu Zain")){
+                        rlatitude = 2.930280;
+                        rlongitude = 101.783127;
+                    }
+                    else {
+                        rlatitude = 2.930255;
+                        rlongitude = 101.779623;
+                    }
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animation.stop();
-            }
-        });*/
-        tvHunt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(hunter_mainmenu.this, Restaurant_available.class);
-                startActivity(intent);
-            }
-        });
-
-
-       /* btnPreorder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               Intent intent = new Intent(hunter_mainmenu.this, Preorder.class);
-               startActivity(intent);
-            }
-        });*/
-
-        btnSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(hunter_mainmenu.this, Hunter_Setting.class);
-                startActivity(intent);
+                    College_location college_location = new College_location(selectedCollege,rlatitude,rlongitude);
+                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    FirebaseDatabase.getInstance().getReference().child("HunterRequest").child(userId).setValue(college_location);
+                    btnHunt.setText("STOP HUNTING");
+                    click++;
+                    Intent in = new Intent(hunter_mainmenu.this, Restaurant_available.class);
+                    startActivity(in);
+                    finish();
+                }
+                else if (click == 1){
+                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    FirebaseDatabase.getInstance().getReference().child("HunterRequest").child(userId).removeValue();
+                    progressBar.setVisibility(View.GONE);
+                    btnHunt.setText("HUNT FOR FOOD");
+                    click = 0;
+                }
             }
         });
 
@@ -97,8 +131,53 @@ public class hunter_mainmenu extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.nav_home:
+                        Toast.makeText(getApplicationContext(),"Home",Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.nav_setting:
+                        Intent intent = new Intent(hunter_mainmenu.this, Hunter_Setting.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.nav_behunter:
+                        FirebaseAuth.getInstance().signOut();
+                        Intent in = new Intent(hunter_mainmenu.this, signup.class);
+                        startActivity(in);
+                        finish();
+                    case R.id.nav_logout:
+                        FirebaseAuth.getInstance().signOut();
+                        Intent i = new Intent(hunter_mainmenu.this, login.class);
+                        startActivity(i);
+                        finish();
+                }
+                DrawerLayout d1=(DrawerLayout)findViewById(R.id.drawer_layout);
+                if(d1.isDrawerOpen(GravityCompat.START)){
+                    d1.closeDrawer(GravityCompat.START);
+                }
+                return false;
+            }
+        });
 
+    }
+    //for spinner item
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override    public boolean onOptionsItemSelected(MenuItem item) {
+        if (toggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -118,70 +197,5 @@ public class hunter_mainmenu extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        displaySelectedScreen(item.getItemId());
-        return true;
-    }
-
-    private void displaySelectedScreen(int itemId) {
-
-        //creating fragment object
-        Fragment fragment = null;
-
-
-
-        //initializing the fragment object which is selected
-        switch (itemId) {
-            /*case R.id.nav_home:
-                fragment = new Setting_Fragment();
-                break;*/
-            /*case R.id.nav_preorder:
-                Intent intent = new Intent(hunter_mainmenu.this, Preorder_request.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                break;*/
-            /*case R.id.nav_setting:
-                fragment = new Setting_Fragment();
-                break;
-            case R.id.nav_support:
-                fragment = new Setting_Fragment();
-                break;
-            case R.id.nav_bedriver:
-                fragment = new Setting_Fragment();
-                break;
-            case R.id.nav_rateus:
-                fragment = new Setting_Fragment();
-                break;*/
-        }
-
-        //replacing the fragment
-        if (fragment != null) {
-            FrameLayout fl = (FrameLayout) findViewById(R.id.content_frame);
-            fl.removeAllViews();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment).commitNow();
-            //ft.commit();
-        }
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-    }
 }

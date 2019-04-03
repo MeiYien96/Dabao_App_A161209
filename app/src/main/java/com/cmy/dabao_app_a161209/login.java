@@ -117,7 +117,12 @@ public class login extends Activity {
         super.onStart();
         if(firebaseAuth.getCurrentUser()!= null){
             finish();
-            startActivity(new Intent(this,hunter_mainmenu.class));
+
+            if(FirebaseDatabase.getInstance().getReference().child("Users").child("Food Driver").getKey().equals(firebaseAuth.getCurrentUser().getUid())){
+                startActivity(new Intent(this,driver_mainmenu.class));
+            }
+            else
+                startActivity(new Intent(this,hunter_mainmenu.class));
         }
     }*/
 

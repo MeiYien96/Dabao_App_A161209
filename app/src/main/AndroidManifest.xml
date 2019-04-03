@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cmy.dabao_app_a161209">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".Driver_Setting"></activity>
+        <activity android:name=".Hunter_Setting" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -33,7 +34,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_map_api_key" />
+            android:value="@string/google_maps_key" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -61,8 +62,6 @@
             android:name=".driver_mainmenu"
             android:label="@string/title_activity_driver_mainmenu"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Driver_Setting" />
-        <activity android:name=".Hunter_Setting" />
         <activity android:name=".Generate_order_details" />
         <activity android:name=".Delivery_Process" />
         <activity android:name=".Thanks_driver" />
