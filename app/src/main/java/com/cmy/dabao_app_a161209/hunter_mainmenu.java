@@ -37,7 +37,7 @@ public class hunter_mainmenu extends AppCompatActivity implements AdapterView.On
     Button btnHunt;
     ActionBarDrawerToggle toggle;
     int click = 0;
-    String selectedCollege;
+    String selectedCollege,driverUid;
     Double rlongitude, rlatitude;
 
     @Override
@@ -105,14 +105,14 @@ public class hunter_mainmenu extends AppCompatActivity implements AdapterView.On
                         rlongitude = 101.779623;
                     }
 
-                    College_location college_location = new College_location(selectedCollege,rlatitude,rlongitude);
+                    College_location college_location = new College_location(selectedCollege,driverUid,rlatitude,rlongitude);
                     String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     FirebaseDatabase.getInstance().getReference().child("HunterRequest").child(userId).setValue(college_location);
                     btnHunt.setText("STOP HUNTING");
                     click++;
                     Intent in = new Intent(hunter_mainmenu.this, Restaurant_available.class);
                     startActivity(in);
-                    finish();
+
                 }
                 else if (click == 1){
                     String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();

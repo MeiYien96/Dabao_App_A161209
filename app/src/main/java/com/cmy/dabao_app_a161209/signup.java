@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class signup extends Activity {
     FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
     String email,username,password,phone,identity,matric,profilePic;
+    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,8 @@ public class signup extends Activity {
         etPassword = findViewById(R.id.etpassword);
         etPhone = findViewById(R.id.et_phone);
         tvLogin = findViewById(R.id.tv_login);
-
+        spinner = (ProgressBar)findViewById(R.id.spi_loading);
+        spinner.setVisibility(View.GONE);
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -65,6 +68,7 @@ public class signup extends Activity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                spinner.setVisibility(View.VISIBLE);
                 username = etUsername.getText().toString().trim();
                 matric = "";
                 password = etPassword.getText().toString().trim();
@@ -92,9 +96,11 @@ public class signup extends Activity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Signed Up Successful", Toast.LENGTH_SHORT).show();
                                                 finish();
+                                                spinner.setVisibility(View.GONE);
                                                 Intent i = new Intent(getApplicationContext(), hunter_mainmenu.class);
                                                 startActivity(i);
                                             } else {
+                                                spinner.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Failed to start interface.", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -108,9 +114,11 @@ public class signup extends Activity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Signed Up Successful", Toast.LENGTH_SHORT).show();
                                                 finish();
+                                                spinner.setVisibility(View.GONE);
                                                 Intent i = new Intent(getApplicationContext(), driver_mainmenu.class);
                                                 startActivity(i);
                                             } else {
+                                                spinner.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Failed to start interface.", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -119,6 +127,7 @@ public class signup extends Activity {
 
                             } else {
                                 Log.e(TAG, "onComplete: Failed=" + task.getException().getMessage());
+                                spinner.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), "Error in Sign Up", Toast.LENGTH_SHORT).show();
                             }
 

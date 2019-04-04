@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class login extends Activity {
     RadioGroup radioGroup;
     RadioButton radioButton;
     FirebaseAuth firebaseAuth;
+    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,9 @@ public class login extends Activity {
         tvRegister = findViewById(R.id.tv_register);
         etMail = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
+        spinner = (ProgressBar)findViewById(R.id.spi_loading);
         firebaseAuth = FirebaseAuth.getInstance();
-
+        spinner.setVisibility(View.GONE);
 
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +62,7 @@ public class login extends Activity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                spinner.setVisibility(View.VISIBLE);
                 mail = etMail.getText().toString().trim();
                 password = etPassword.getText().toString().trim();
 
@@ -76,6 +80,7 @@ public class login extends Activity {
                                 finish();
                                 if(identity.equals("Food Hunter")){
                                     finish();
+                                    spinner.setVisibility(View.GONE);
                                     startActivity(new Intent(login.this, hunter_mainmenu.class));
                                     Toast.makeText(login.this, "Welcome!", Toast.LENGTH_SHORT).show();
 
@@ -83,12 +88,14 @@ public class login extends Activity {
                                 }
                                 else if(identity.equals("Food Driver")){
                                     finish();
+                                    spinner.setVisibility(View.GONE);
                                     startActivity(new Intent(login.this, driver_mainmenu.class));
                                     Toast.makeText(login.this, "Welcome !", Toast.LENGTH_SHORT).show();
 
 
                                 }
                                 else{
+                                    spinner.setVisibility(View.GONE);
                                     Toast.makeText(login.this, "Wrong Username or Password!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
@@ -112,9 +119,24 @@ public class login extends Activity {
 
         return result;
     }
-
-    /*protected void onStart(){
+    /*DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Users");
+    String keys;
+    protected void onStart(){
         super.onStart();
+        ref.orderByChild(ref.child("Food Driver").getRoot().toString()).equalTo(firebaseAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot datas: dataSnapshot.getChildren()){
+                    keys=datas.getKey();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         if(firebaseAuth.getCurrentUser()!= null){
             finish();
 

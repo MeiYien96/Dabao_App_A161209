@@ -63,6 +63,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
+
 
 public class driver_mainmenu extends  AppCompatActivity
 implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener, AdapterView.OnItemSelectedListener {
@@ -165,29 +167,20 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                     }
 
                     final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference("Users").child("Food Driver").child(userId);
-
-                    myRef.addValueEventListener(new ValueEventListener() {
+                    DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Users").child("Food Driver").child(userId);
+                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                            for (DataSnapshot childSnap : dataSnapshot.getChildren()) {
-                                Log.v("tmz",""+ childSnap.getKey()); //displays the key for the node
-                                username = childSnap.child("username").getValue().toString();   //gives the value for given keyname
-                            }
-
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            username = user.getUsername();
                         }
 
                         @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
                         }
                     });
-                    //DatabaseReference ref_username = myRef.child("Users").child("Food Driver").child(userId).child("username");
-                    //username = FirebaseDatabase.getInstance().getReference().child("Users").child("Food Driver").child(userId).child("username").getKey();
-                    //username = ref_username.toString();
-                    profilePic = "";
+
                     Restaurant_location restaurant_location = new Restaurant_location(username,restaurantId,selectedRestaurant,foodTag1,foodTag2,profilePic,rlatitude,rlongitude,btnOrder);
                     FirebaseDatabase.getInstance().getReference().child("DriversAvailable").child(userId).setValue(restaurant_location);
                     btnDelivery.setText("STOP DELIVERY");
@@ -241,6 +234,7 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             }
         });
     }
+
     @Override    public boolean onOptionsItemSelected(MenuItem item) {
         if (toggle.onOptionsItemSelected(item)){
             return true;
