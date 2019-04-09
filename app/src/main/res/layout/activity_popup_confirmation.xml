@@ -25,38 +25,24 @@
         tools:background="@drawable/rectangle" />
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/tv_driverName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Order No : C001"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.479"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="Driver Name : Jason Tan"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView17"
-        app:layout_constraintStart_toStartOf="@+id/textView17"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/tv_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -65,12 +51,12 @@
         android:text="From : Restoran Mohd Chan "
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView19"
-        app:layout_constraintStart_toStartOf="@+id/textView19"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_driverName"
+        app:layout_constraintStart_toStartOf="@+id/tv_driverName"
+        app:layout_constraintTop_toBottomOf="@+id/tv_driverName" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/tv_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -79,12 +65,12 @@
         android:text="To : Kolej Pendeta Zaba"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView20"
-        app:layout_constraintStart_toStartOf="@+id/textView20"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_from"
+        app:layout_constraintStart_toStartOf="@+id/tv_from"
+        app:layout_constraintTop_toBottomOf="@+id/tv_from" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/tv_foodPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -93,12 +79,12 @@
         android:text="Food 1 : RM 5.00 "
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView21"
-        app:layout_constraintStart_toStartOf="@+id/textView21"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_to"
+        app:layout_constraintStart_toStartOf="@+id/tv_to"
+        app:layout_constraintTop_toBottomOf="@+id/tv_to" />
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/tv_deliveryFee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -107,12 +93,12 @@
         android:text="Delivery Fees (20%) : RM 1.00"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView22"
-        app:layout_constraintStart_toStartOf="@+id/textView22"
-        app:layout_constraintTop_toBottomOf="@+id/textView22" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_foodPrice"
+        app:layout_constraintStart_toStartOf="@+id/tv_foodPrice"
+        app:layout_constraintTop_toBottomOf="@+id/tv_foodPrice" />
 
     <TextView
-        android:id="@+id/textView16"
+        android:id="@+id/tv_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -121,9 +107,9 @@
         android:text="Total : RM 6.00"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView23"
-        app:layout_constraintStart_toStartOf="@+id/textView23"
-        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_deliveryFee"
+        app:layout_constraintStart_toStartOf="@+id/tv_deliveryFee"
+        app:layout_constraintTop_toBottomOf="@+id/tv_deliveryFee" />
 
 
     <Button
@@ -141,7 +127,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.459"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_total" />
 
 
     <Button

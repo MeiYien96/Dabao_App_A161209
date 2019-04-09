@@ -26,7 +26,6 @@ public class Restaurant_available extends Activity {
     ArrayList<Restaurant_location> list;
     Restaurant_adapter adapter;
     Button btnViewOrder;
-    boolean orderAvailable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,24 +60,23 @@ public class Restaurant_available extends Activity {
         btnViewOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //failed
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Order");
                 ref.orderByChild("hunterUid").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        orderAvailable = true;
+                        if(!dataSnapshot.exists()){
+                            Toast.makeText(Restaurant_available.this, "Order hasn't exist yet!", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                            startActivity(new Intent(Restaurant_available.this, Popup_confirmation.class));
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        orderAvailable = false;
+
                     }
                 });
-                if(orderAvailable = true){
-                    startActivity(new Intent(Restaurant_available.this, Popup_confirmation.class));
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Order hasn't exist yet!", Toast.LENGTH_SHORT).show();
-                }
 
             }
         });

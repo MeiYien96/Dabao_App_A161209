@@ -4,6 +4,9 @@ public class Order {
     String driverUid,driverName,hunterUid, hunterName, from, to;
     Double foodPrice, deliveryFee, total;
 
+    public Order(){
+
+    }
     public Order(String driverUid, String driverName, String hunterUid, String hunterName, String from, String to, Double foodPrice, Double deliveryFee, Double total) {
         this.driverUid = driverUid;
         this.driverName = driverName;

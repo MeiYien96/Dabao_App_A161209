@@ -21,10 +21,6 @@
             "package_name": "com.cmy.dabao_app_a161209",
             "certificate_hash": "5d91f5a068abc6d8fe0cec70bd8c462a05aadf39"
           }
-        },
-        {
-          "client_id": "360734365424-9cf5qlmo4puui91tnfjbpbsgr6j2gnb3.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -33,20 +29,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "360734365424-9cf5qlmo4puui91tnfjbpbsgr6j2gnb3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
