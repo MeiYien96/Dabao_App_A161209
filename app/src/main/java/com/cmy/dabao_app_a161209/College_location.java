@@ -1,16 +1,17 @@
 package com.cmy.dabao_app_a161209;
 
 public class College_location {
-    String collegeName,driverUid;
+    String collegeName,driverUid,username;
     Double latitude, longitude;
 
     public College_location(){
 
     }
 
-    public College_location(String collegeName, String driverUid, Double latitude, Double longitude) {
+    public College_location(String collegeName, String driverUid, String username, Double latitude, Double longitude) {
         this.collegeName = collegeName;
         this.driverUid = driverUid;
+        this.username = username;
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -29,6 +30,14 @@ public class College_location {
 
     public void setDriverUid(String driverUid) {
         this.driverUid = driverUid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Double getLatitude() {

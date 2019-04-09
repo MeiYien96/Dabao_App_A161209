@@ -68,27 +68,15 @@ import java.util.ArrayList;
 
 public class driver_mainmenu extends  AppCompatActivity
 implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener, AdapterView.OnItemSelectedListener {
-    Button btnDelivery;
+    Button btnDelivery,btnGenerateOrder, btnOrder;
     int click = 0;
-    ImageView ivGenerateOrder, ivMap;
-    TextView tvHaving;
-    private static final String TAG = "driver_mainmenu";
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
     String username,restaurantId,selectedRestaurant,foodTag1,foodTag2,profilePic;
-    Button btnOrder;
     Double rlongitude, rlatitude;
     ActionBarDrawerToggle toggle;
-    //private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
-    /*private boolean mLocationPermissionGranted = false;
-    private static final int ERROR_DIALOG_REQUEST = 9001;
-    private static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
-    private FirebaseFirestore mDb;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private UserLocation mUserLocation; */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,16 +88,9 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                 .findFragmentById(R.id.driver_map);
         mapFragment.getMapAsync(this);
 
-       /* mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.driver_map);
-        mapFragment.getMapAsync(this);
-        checkMapServices();
-        mDb = FirebaseFirestore.getInstance();*/
 
         btnDelivery = findViewById(R.id.btn_delivery);
-        ivGenerateOrder = findViewById(R.id.iv_order);
-        ivMap = findViewById(R.id.iv_map);
+        btnGenerateOrder = findViewById(R.id.btn_generate_order);
 
         final Spinner spinner = (Spinner) findViewById(R.id.spi_restaurant);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -117,10 +98,10 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        ivGenerateOrder.setOnClickListener(new View.OnClickListener() {
+        btnGenerateOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(driver_mainmenu.this, Popup_order.class));
+                startActivity(new Intent(driver_mainmenu.this, Generate_order_details.class));
             }
         });
 
@@ -269,60 +250,6 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         return true;
     }
 
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
-    @SuppressWarnings("StatementWithEmptyBody")
-   /* @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        displaySelectedScreen(item.getItemId());
-        return true;
-    }
-    private void displaySelectedScreen(int itemId) {
-
-        //creating fragment object
-        Fragment fragment = null;
-
-        //initializing the fragment object which is selected
-        switch (itemId) {
-            /*case R.id.nav_home:
-                fragment = new Setting_Fragment();
-                break;
-            case R.id.nav_setting:
-                fragment = new Setting_Fragment();
-                break;
-            case R.id.nav_bedriver:
-                fragment = new Setting_Fragment();
-                break;
-
-        }*/
-
-        //replacing the fragment
-       /* if (fragment != null) {
-            FrameLayout fl = (FrameLayout) findViewById(R.id.content_frame);
-            fl.removeAllViews();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment).commitNow();
-            //ft.commit();
-        }
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-    }*/
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -350,10 +277,6 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
 
-        /*String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriverAvailable");
-        GeoFire geoFire = new GeoFire(ref);
-        geoFire.setLocation(userId,new GeoLocation(location.getLatitude(),location.getLongitude()));*/
     }
 
     @Override
@@ -380,180 +303,4 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
     }
 
-
-   /* @Override
-    protected void onStop() {
-        super.onStop();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriverAvailable");
-        GeoFire geoFire = new GeoFire(ref);
-        geoFire.removeLocation(userId);
-    }*/
-    /* private void getUserDetails(){
-        if(mUserLocation == null){
-            mUserLocation = new UserLocation();
-            DocumentReference userRef = mDb.collection(getString(R.string.collection_users)).document(FirebaseAuth.getInstance().getUid());
-
-            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
-                        Log.d(TAG, "onComplete: Successfully get user details.");
-                        User user = task.getResult().toObject(User.class);
-                        mUserLocation.setUser(user);
-                        getLastKnownLocation();
-                    }
-                }
-            });
-        }
-    }
-    private void saveUserLocation(){
-        if(mUserLocation != null){
-            DocumentReference locationRef = mDb.collection(getString(R.string.collection_user_locations)).document(FirebaseAuth.getInstance().getUid());
-            locationRef.set(mUserLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
-                        Log.d(TAG, "Save user location "+"\nLatitude: "+ mUserLocation.getGeoPoint().getLatitude()+"\nLongitude: "+ mUserLocation.getGeoPoint().getLongitude());
-                    }
-                }
-            });
-        }
-    }
-
-    private void getLastKnownLocation(){
-        Log.d(TAG, "getLastKnownLocation: called.");
-        mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-
-                if(task.isSuccessful()){
-                    Location location = task.getResult();
-                    GeoPoint geoPoint = new GeoPoint( location.getLatitude(),location.getLongitude());
-                    Log.d(TAG, "onCompleted: Latitude: "+ geoPoint.getLatitude());
-                    Log.d(TAG, "onCompleted: Latitude: "+ geoPoint.getLongitude());
-
-                    mUserLocation.setGeoPoint(geoPoint);
-                    mUserLocation.setTimestamp(null);
-                }
-
-            }
-        });
-    }
-
-    //for map and location permission
-    private boolean checkMapServices(){
-        if(isServicesOK()){
-            if(isMapsEnabled()){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
-                    }
-                });
-        final AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    public boolean isMapsEnabled(){
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            buildAlertMessageNoGps();
-            return false;
-        }
-        return true;
-    } */
-
-   /* private void getLocationPermission() {
-
-      /*  if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-            //getChatrooms();
-            getUserDetails();
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }
-
-    public boolean isServicesOK(){
-        Log.d(TAG, "isServicesOK: checking google services version");
-
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(driver_mainmenu.this);
-
-        if(available == ConnectionResult.SUCCESS){
-            //everything is fine and the user can make map requests
-            Log.d(TAG, "isServicesOK: Google Play Services is working");
-            return true;
-        }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-            //an error occured but we can resolve it
-            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(driver_mainmenu.this, available, ERROR_DIALOG_REQUEST);
-            dialog.show();
-        }else{
-            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
-        }
-        return false;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        mLocationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLocationPermissionGranted = true;
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: called.");
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if(mLocationPermissionGranted){
-                    //getChatrooms();
-                    getUserDetails();
-                }
-                else{
-                    getLocationPermission();
-                }
-            }
-        }
-
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(2.9619, 101.7571))
-                .title("Marker"));
-    } */
 }

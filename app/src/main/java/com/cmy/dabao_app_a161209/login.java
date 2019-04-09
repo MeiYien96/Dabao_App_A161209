@@ -119,33 +119,16 @@ public class login extends Activity {
 
         return result;
     }
-    /*DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Users");
-    String keys;
-    protected void onStart(){
+
+    /*protected void onStart(){
         super.onStart();
-        ref.orderByChild(ref.child("Food Driver").getRoot().toString()).equalTo(firebaseAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot datas: dataSnapshot.getChildren()){
-                    keys=datas.getKey();
-                }
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         if(firebaseAuth.getCurrentUser()!= null){
             finish();
-
-            if(FirebaseDatabase.getInstance().getReference().child("Users").child("Food Driver").getKey().equals(firebaseAuth.getCurrentUser().getUid())){
-                startActivity(new Intent(this,driver_mainmenu.class));
             }
             else
-                startActivity(new Intent(this,hunter_mainmenu.class));
-        }
+                startActivity(new Intent(this,login.class));
+
     }*/
 
 }

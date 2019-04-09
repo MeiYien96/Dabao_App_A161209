@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".driver_mainmenu">
 
-    <fragment
-        android:id="@+id/driver_map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MapsActivity"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout2"
         android:layout_width="439dp"
@@ -36,7 +27,7 @@
         android:id="@+id/include2"
         layout="@layout/content_driver_mainmenu"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="359dp" />
+        tools:layout_editor_absoluteY="44dp" />
 
     <TextView
         android:id="@+id/tv_having"
@@ -49,7 +40,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/colorPrimary"
         android:text="I am having meal at "
         android:textColor="@android:color/black"
         android:textSize="24sp"
@@ -67,24 +57,6 @@
         android:id="@+id/map"
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />-->
-    <!--<ImageView
-        android:id="@+id/iv_map"
-        android:layout_width="334dp"
-        android:layout_height="310dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_location"
-        app:layout_constraintVertical_bias="0.023"
-        app:srcCompat="@drawable/driver_map" /> -->
 
     <Spinner
         android:id="@+id/spi_restaurant"
@@ -104,37 +76,53 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_having"
         app:layout_constraintVertical_bias="0.013" />
 
+    <fragment
+        android:id="@+id/driver_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="380dp"
+        android:layout_height="299dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spi_restaurant"
+        tools:context=".MapsActivity" />
+
     <Button
         android:id="@+id/btn_delivery"
         android:layout_width="221dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="40dp"
         android:background="@color/colorPrimary"
         android:text="Ready For Deliver"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.373"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/driver_map" />
 
-    <ImageView
-        android:id="@+id/iv_order"
-        android:layout_width="48dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="48dp"
+    <Button
+        android:id="@+id/btn_generate_order"
+        android:layout_width="221dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimary"
+        android:text="Generate Order"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.584"
-        app:layout_constraintStart_toEndOf="@+id/btn_delivery"
-        app:srcCompat="@drawable/ic_library_books_black_24dp" />
+        app:layout_constraintEnd_toEndOf="@+id/btn_delivery"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_delivery"
+        app:layout_constraintTop_toBottomOf="@+id/btn_delivery"
+        app:layout_constraintVertical_bias="0.125" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -31,13 +31,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class hunter_mainmenu extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     Button btnHunt;
     ActionBarDrawerToggle toggle;
     int click = 0;
-    String selectedCollege,driverUid;
+    String selectedCollege,driverUid,username;
     Double rlongitude, rlatitude;
 
     @Override
@@ -104,9 +108,21 @@ public class hunter_mainmenu extends AppCompatActivity implements AdapterView.On
                         rlatitude = 2.930255;
                         rlongitude = 101.779623;
                     }
-
-                    College_location college_location = new College_location(selectedCollege,driverUid,rlatitude,rlongitude);
                     String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Food Hunter").child(userId);
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            username = user.getUsername();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    College_location college_location = new College_location(selectedCollege,driverUid,username,rlatitude,rlongitude);
                     FirebaseDatabase.getInstance().getReference().child("HunterRequest").child(userId).setValue(college_location);
                     btnHunt.setText("STOP HUNTING");
                     click++;

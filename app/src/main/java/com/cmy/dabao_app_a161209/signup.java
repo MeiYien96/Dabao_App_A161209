@@ -50,7 +50,7 @@ public class signup extends Activity {
         etPassword = findViewById(R.id.etpassword);
         etPhone = findViewById(R.id.et_phone);
         tvLogin = findViewById(R.id.tv_login);
-        spinner = (ProgressBar)findViewById(R.id.spi_loading);
+        spinner = (ProgressBar)findViewById(R.id.spi_progress);
         spinner.setVisibility(View.GONE);
 
         firebaseAuth = FirebaseAuth.getInstance();

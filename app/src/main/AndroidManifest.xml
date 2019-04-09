@@ -53,9 +53,7 @@
         <activity
             android:name=".Popup_confirmation"
             android:theme="@style/AppTheme.CustomTheme" />
-        <activity
-            android:name=".Popup_order"
-            android:theme="@style/AppTheme.CustomTheme" />
+
         <activity android:name=".Food_tracking" />
         <activity android:name=".Thanks" />
         <activity
