@@ -1,19 +1,20 @@
 package com.cmy.dabao_app_a161209;
 
 public class Order {
-    String driverUid,driverName,hunterUid, hunterName, from, to;
+    String driverUid,driverName,hunterUid, hunterName, from, to,status;
     Double foodPrice, deliveryFee, total;
 
     public Order(){
 
     }
-    public Order(String driverUid, String driverName, String hunterUid, String hunterName, String from, String to, Double foodPrice, Double deliveryFee, Double total) {
+    public Order(String driverUid, String driverName, String hunterUid, String hunterName, String from, String to,String status, Double foodPrice, Double deliveryFee, Double total) {
         this.driverUid = driverUid;
         this.driverName = driverName;
         this.hunterUid = hunterUid;
         this.hunterName = hunterName;
         this.from = from;
         this.to = to;
+        this.status = status;
         this.foodPrice = foodPrice;
         this.deliveryFee = deliveryFee;
         this.total = total;
@@ -65,6 +66,14 @@ public class Order {
 
     public void setTo(String to) {
         this.to = to;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Double getFoodPrice() {

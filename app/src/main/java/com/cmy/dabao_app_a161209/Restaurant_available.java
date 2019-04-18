@@ -60,7 +60,6 @@ public class Restaurant_available extends Activity {
         btnViewOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //failed
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Order");
                 ref.orderByChild("hunterUid").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

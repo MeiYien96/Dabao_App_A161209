@@ -110,43 +110,6 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             @Override
             public void onClick(View v) {
                 if(click == 0){
-                    selectedRestaurant = String.valueOf(spinner.getSelectedItem());
-                    if(selectedRestaurant.equals("Restoran Al Fariz Maju")){
-                        restaurantId = "R001";
-                        rlatitude = 2.928220;
-                        rlongitude = 101.767240;
-                        foodTag1 = "Indian Cuisine";
-                        foodTag2 = "Halal";
-                    }
-                    else if(selectedRestaurant.equals("大树下饭店 Kedai Makan Kita")){
-                        restaurantId = "R002";
-                        rlatitude = 2.927330;
-                        rlongitude = 101.768140;
-                        foodTag1 = "Chinese Cuisine";
-                        foodTag2 = "Non-Halal";
-                    }
-                    else if(selectedRestaurant.equals("Mohammad Chan Restaurant")){
-                        restaurantId = "R003";
-                        rlatitude = 2.970819;
-                        rlongitude = 101.776336;
-                        foodTag1 = "Chinese Muslim";
-                        foodTag2 = "Halal";
-                    }
-                    else if(selectedRestaurant.equals("Hot Meal Bar")){
-                        restaurantId = "R004";
-                        rlatitude = 2.930770;
-                        rlongitude = 101.776990;
-                        foodTag1 = "Chinese Muslim";
-                        foodTag2 = "Halal";
-                    }
-                    else {
-                        restaurantId = "R005";
-                        rlatitude = 2.928190;
-                        rlongitude = 101.767471;
-                        foodTag1 = "Chinese Muslim";
-                        foodTag2 = "Halal";
-                    }
-
                     final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Users").child("Food Driver").child(userId);
                     myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -154,6 +117,46 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             User user = dataSnapshot.getValue(User.class);
                             username = user.getUsername();
+                            selectedRestaurant = String.valueOf(spinner.getSelectedItem());
+                            if(selectedRestaurant.equals("Restoran Al Fariz Maju")){
+                                restaurantId = "R001";
+                                rlatitude = 2.928220;
+                                rlongitude = 101.767240;
+                                foodTag1 = "Indian Cuisine";
+                                foodTag2 = "Halal";
+                            }
+                            else if(selectedRestaurant.equals("大树下饭店 Kedai Makan Kita")){
+                                restaurantId = "R002";
+                                rlatitude = 2.927330;
+                                rlongitude = 101.768140;
+                                foodTag1 = "Chinese Cuisine";
+                                foodTag2 = "Non-Halal";
+                            }
+                            else if(selectedRestaurant.equals("Mohammad Chan Restaurant")){
+                                restaurantId = "R003";
+                                rlatitude = 2.970819;
+                                rlongitude = 101.776336;
+                                foodTag1 = "Chinese Muslim";
+                                foodTag2 = "Halal";
+                            }
+                            else if(selectedRestaurant.equals("Hot Meal Bar")){
+                                restaurantId = "R004";
+                                rlatitude = 2.930770;
+                                rlongitude = 101.776990;
+                                foodTag1 = "Chinese Muslim";
+                                foodTag2 = "Halal";
+                            }
+                            else {
+                                restaurantId = "R005";
+                                rlatitude = 2.928190;
+                                rlongitude = 101.767471;
+                                foodTag1 = "Chinese Muslim";
+                                foodTag2 = "Halal";
+                            }
+                            Restaurant_location restaurant_location = new Restaurant_location(username,restaurantId,selectedRestaurant,foodTag1,foodTag2,profilePic,rlatitude,rlongitude,btnOrder);
+                            FirebaseDatabase.getInstance().getReference().child("DriversAvailable").child(userId).setValue(restaurant_location);
+                            btnDelivery.setText("STOP DELIVERY");
+                            click++;
                         }
 
                         @Override
@@ -162,10 +165,6 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                         }
                     });
 
-                    Restaurant_location restaurant_location = new Restaurant_location(username,restaurantId,selectedRestaurant,foodTag1,foodTag2,profilePic,rlatitude,rlongitude,btnOrder);
-                    FirebaseDatabase.getInstance().getReference().child("DriversAvailable").child(userId).setValue(restaurant_location);
-                    btnDelivery.setText("STOP DELIVERY");
-                    click++;
                 }
                 else if (click == 1){
                     String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -277,6 +276,10 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
 
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailableLocation");
+        GeoFire geofire = new GeoFire(ref);
+        geofire.setLocation(userId, new GeoLocation(location.getLatitude(),location.getLongitude()));
     }
 
     @Override
@@ -303,4 +306,12 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailableLocation");
+        GeoFire geofire = new GeoFire(ref);
+        geofire.removeLocation(userId);
+    }
 }

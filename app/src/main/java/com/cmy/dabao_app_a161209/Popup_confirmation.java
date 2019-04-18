@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -80,6 +81,15 @@ public class Popup_confirmation extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Popup_confirmation.this, Food_tracking.class));
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseDatabase.getInstance().getReference().child("Order").child(orderUid).removeValue();
+                Toast.makeText(Popup_confirmation.this, "Your order have been removed!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Popup_confirmation.this, hunter_mainmenu.class));
             }
         });
 
