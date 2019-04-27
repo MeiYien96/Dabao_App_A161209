@@ -67,7 +67,7 @@ import java.util.ArrayList;
 
 
 public class driver_mainmenu extends  AppCompatActivity
-implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener, AdapterView.OnItemSelectedListener {
+        implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener, AdapterView.OnItemSelectedListener {
     Button btnDelivery,btnGenerateOrder, btnOrder;
     int click = 0;
     private GoogleMap mMap;
@@ -256,8 +256,8 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             Toast.makeText(driver_mainmenu.this, "Permission Not Granted", Toast.LENGTH_SHORT).show();
             return;
         }
-            buildGoogleApiClient();
-            mMap.setMyLocationEnabled(true);
+        buildGoogleApiClient();
+        mMap.setMyLocationEnabled(true);
         // Add a marker in Sydney and move the camera
        /* LatLng Malaysia= new LatLng(4.210484,101.975766);
         mMap.addMarker(new MarkerOptions().position(Malaysia).title("Marker in Malaysia"));
@@ -292,7 +292,7 @@ implements  OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             return;
         }
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,mLocationRequest,this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,mLocationRequest,this);
 
     }
 

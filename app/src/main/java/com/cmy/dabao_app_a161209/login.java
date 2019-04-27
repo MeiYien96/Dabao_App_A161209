@@ -1,9 +1,15 @@
 package com.cmy.dabao_app_a161209;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -51,6 +57,49 @@ public class login extends Activity {
         firebaseAuth = FirebaseAuth.getInstance();
         spinner.setVisibility(View.GONE);
 
+        if (ContextCompat.checkSelfPermission(login.this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(login.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
+                builder.setTitle("Require Location Permission");
+                builder.setTitle("This app require location permission to get the location information.");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(login.this,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                0);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(login.this, "Sorry, this app cannot be worked until the Location Permission is granded.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.show();
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(login.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        0);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+
+        }
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
