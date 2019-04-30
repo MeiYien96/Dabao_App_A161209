@@ -8,8 +8,8 @@
 
     <View
         android:id="@+id/view3"
-        android:layout_width="365dp"
-        android:layout_height="418dp"
+        android:layout_width="375dp"
+        android:layout_height="610dp"
         android:layout_margin="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -25,6 +25,23 @@
         app:layout_constraintVertical_bias="0.103" />
 
     <Button
+        android:id="@+id/btn_accept_order"
+        android:layout_width="306dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorPrimary"
+        android:text="accept another order"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view3" />
+
+    <Button
         android:id="@+id/btn_delivering"
         android:layout_width="306dp"
         android:layout_height="115dp"
@@ -34,17 +51,18 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimary"
         android:text="Start Delivering"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view3"
-        app:layout_constraintVertical_bias="0.11" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_accept_order"
+        app:layout_constraintVertical_bias="0.034" />
 
     <Button
-        android:id="@+id/btn_arrived"
+        android:id="@+id/btn_complete"
         android:layout_width="306dp"
         android:layout_height="115dp"
         android:layout_marginStart="8dp"
@@ -53,7 +71,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Arrived"
+        android:background="@color/colorPrimary"
+        android:text="complete all delivery"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,42 +80,4 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_delivering"
         app:layout_constraintVertical_bias="0.079" />
 
-    <Button
-        android:id="@+id/btn_contact"
-        android:layout_width="153dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/colorPrimary"
-        android:text="Contact Food Hunter "
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:layout_constraintVertical_bias="0.384" />
-
-    <Button
-        android:id="@+id/btn_cancel"
-        android:layout_width="153dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/colorPrimary"
-        android:text="Cancel Delivery"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_contact"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:layout_constraintVertical_bias="0.384" />
 </android.support.constraint.ConstraintLayout>

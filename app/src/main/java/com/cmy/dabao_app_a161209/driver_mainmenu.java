@@ -74,8 +74,7 @@ public class driver_mainmenu extends  AppCompatActivity
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
-    String username,restaurantId,selectedRestaurant,foodTag1,foodTag2,profilePic;
-    Double rlongitude, rlatitude;
+    String username,selectedRestaurant,foodTag1,foodTag2,profilePic;
     ActionBarDrawerToggle toggle;
 
     @Override
@@ -119,41 +118,26 @@ public class driver_mainmenu extends  AppCompatActivity
                             username = user.getUsername();
                             selectedRestaurant = String.valueOf(spinner.getSelectedItem());
                             if(selectedRestaurant.equals("Restoran Al Fariz Maju")){
-                                restaurantId = "R001";
-                                rlatitude = 2.928220;
-                                rlongitude = 101.767240;
                                 foodTag1 = "Indian Cuisine";
                                 foodTag2 = "Halal";
                             }
                             else if(selectedRestaurant.equals("大树下饭店 Kedai Makan Kita")){
-                                restaurantId = "R002";
-                                rlatitude = 2.927330;
-                                rlongitude = 101.768140;
                                 foodTag1 = "Chinese Cuisine";
                                 foodTag2 = "Non-Halal";
                             }
                             else if(selectedRestaurant.equals("Mohammad Chan Restaurant")){
-                                restaurantId = "R003";
-                                rlatitude = 2.970819;
-                                rlongitude = 101.776336;
                                 foodTag1 = "Chinese Muslim";
                                 foodTag2 = "Halal";
                             }
                             else if(selectedRestaurant.equals("Hot Meal Bar")){
-                                restaurantId = "R004";
-                                rlatitude = 2.930770;
-                                rlongitude = 101.776990;
                                 foodTag1 = "Chinese Muslim";
                                 foodTag2 = "Halal";
                             }
                             else {
-                                restaurantId = "R005";
-                                rlatitude = 2.928190;
-                                rlongitude = 101.767471;
                                 foodTag1 = "Chinese Muslim";
                                 foodTag2 = "Halal";
                             }
-                            Restaurant_location restaurant_location = new Restaurant_location(username,restaurantId,selectedRestaurant,foodTag1,foodTag2,profilePic,rlatitude,rlongitude,btnOrder);
+                            Restaurant_location restaurant_location = new Restaurant_location(username,selectedRestaurant,foodTag1,foodTag2,profilePic,btnOrder);
                             FirebaseDatabase.getInstance().getReference().child("DriversAvailable").child(userId).setValue(restaurant_location);
                             btnDelivery.setText("STOP DELIVERY");
                             click++;

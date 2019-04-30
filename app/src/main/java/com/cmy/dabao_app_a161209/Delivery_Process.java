@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.firebase.geofire.GeoFire;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,59 +16,45 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class Delivery_Process extends AppCompatActivity  {
-    Button  btnDelivering,btnArrived, btnContact, btnCancel;
-    String orderUid;
+    Button  btnAcceptOrder,btnDelivering,btnComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery__process);
 
+        btnAcceptOrder = findViewById(R.id.btn_accept_order);
         btnDelivering = findViewById(R.id.btn_delivering);
-        btnArrived = findViewById(R.id.btn_arrived);
-        btnContact = findViewById(R.id.btn_contact);
-        btnCancel = findViewById(R.id.btn_cancel);
+        btnComplete = findViewById(R.id.btn_complete);
+        btnComplete.setEnabled(false);
 
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        btnAcceptOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Delivery_Process.this, Generate_order_details.class));
+            }
+        });
+
         btnDelivering.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Order");
-                ref.orderByChild("driverUid").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
-                            orderUid = childSnapshot.getKey();
-                            final DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Order").child(orderUid).child("hunterUid");
-                            ref1.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    ref1.child("status").setValue("Delivering");
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                btnComplete.setEnabled(true);
+                FirebaseDatabase.getInstance().getReference("DriversAvailable").child(userId).removeValue();
             }
         });
-        btnArrived.setOnClickListener(new View.OnClickListener() {
+        btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailableLocation");
+                GeoFire geofire = new GeoFire(ref);
+                geofire.removeLocation(userId);
+                startActivity(new Intent(Delivery_Process.this, Thanks_driver.class));
             }
         });
 
     }
-
 
     }

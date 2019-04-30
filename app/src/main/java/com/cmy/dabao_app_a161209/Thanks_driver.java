@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.Button;
 
 public class Thanks_driver extends AppCompatActivity {
-    Button btnRateus, btnMainmenu;
+    Button btnMainmenu,btnExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanks_driver);
 
-        btnRateus = findViewById(R.id.btn_rateus);
         btnMainmenu = findViewById(R.id.btn_mainmenu);
+        btnExit = findViewById(R.id.btn_exit);
 
         btnMainmenu.setOnClickListener(new View.OnClickListener() {
             @Override

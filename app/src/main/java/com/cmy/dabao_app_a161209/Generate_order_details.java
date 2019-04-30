@@ -21,7 +21,7 @@ import static java.lang.Double.parseDouble;
 public class Generate_order_details extends AppCompatActivity {
     Button btnCalculate, btnConfirm;
     EditText etHunterName, etDriverName, etFrom, etTo, etFoodPrice, etDeliveryFee, etTotal;
-    String hunterName, driverName, from, to,status,foodprice,hunterUid;
+    String hunterName, driverName, from, to,foodprice,hunterUid;
     Double foodPrice, deliveryFee, total;
     DecimalFormat df = new DecimalFormat("#.00");
 
@@ -37,6 +37,8 @@ public class Generate_order_details extends AppCompatActivity {
         etFoodPrice = findViewById(R.id.et_foodPrice);
         etDeliveryFee = findViewById(R.id.et_deliveryFee);
         etTotal = findViewById(R.id.et_total);
+        etDeliveryFee.setEnabled(false);
+        etTotal.setEnabled(false);
         btnCalculate = findViewById(R.id.btn_calculate);
         btnConfirm = findViewById(R.id.btn_send_order);
 
@@ -105,7 +107,7 @@ public class Generate_order_details extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Order order = new Order(userId,driverName,hunterUid, hunterName, from,to,status, foodPrice,deliveryFee,total);
+                Order order = new Order(userId,driverName,hunterUid, hunterName, from,to, foodPrice,deliveryFee,total);
                 DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Order").push();
                 df.setValue(order);
                 Intent intent = new Intent(Generate_order_details.this, Delivery_Process.class);

@@ -42,7 +42,6 @@ public class hunter_mainmenu extends AppCompatActivity implements AdapterView.On
     ActionBarDrawerToggle toggle;
     int click = 0;
     String selectedCollege,driverUid,username;
-    Double rlongitude, rlatitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,47 +74,7 @@ public class hunter_mainmenu extends AppCompatActivity implements AdapterView.On
                             User user = dataSnapshot.getValue(User.class);
                             username = user.getUsername();
                             selectedCollege = String.valueOf(spinner.getSelectedItem());
-                            if(selectedCollege.equals("Kolej Pendeta Za’ba")){
-                                rlatitude = 2.919514;
-                                rlongitude = 101.774489;
-                            }
-                            else if(selectedCollege.equals("Kolej Burhanuddin Helmi")){
-                                rlatitude = 2.927593;
-                                rlongitude = 101.776949;
-                            }
-                            else if(selectedCollege.equals("Kolej Keris Mas")){
-                                rlatitude = 2.926817;
-                                rlongitude = 101.789284;
-                            }
-                            else if(selectedCollege.equals("Kolej Dato’Onn")){
-                                rlatitude = 2.931418;
-                                rlongitude = 101.780544;
-                            }
-                            else if(selectedCollege.equals("Kolej Aminuddin Baki")){
-                                rlatitude = 2.924733;
-                                rlongitude = 101.783970;
-                            }
-                            else if(selectedCollege.equals("Kolej Ungku Omar")){
-                                rlatitude = 2.924727;
-                                rlongitude = 101.779836;
-                            }
-                            else if(selectedCollege.equals("Kolej Ibrahim Yaakub")){
-                                rlatitude = 2.924536;
-                                rlongitude = 101.778223;
-                            }
-                            else if(selectedCollege.equals("Kolej Rahim Kajai")){
-                                rlatitude = 2.932995;
-                                rlongitude = 101.783355;
-                            }
-                            else if(selectedCollege.equals("Kolej Ibu Zain")){
-                                rlatitude = 2.930280;
-                                rlongitude = 101.783127;
-                            }
-                            else {
-                                rlatitude = 2.930255;
-                                rlongitude = 101.779623;
-                            }
-                            College_location college_location = new College_location(selectedCollege,driverUid,username,rlatitude,rlongitude);
+                            College_location college_location = new College_location(selectedCollege,driverUid,username);
                             FirebaseDatabase.getInstance().getReference().child("HunterRequest").child(userId).setValue(college_location);
                             btnHunt.setText("STOP HUNTING");
                             click++;

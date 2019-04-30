@@ -74,27 +74,14 @@
         app:layout_constraintVertical_bias="0.383" />
 
     <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="161dp"
-        android:layout_height="31dp"
-        android:layout_marginTop="8dp"
-        android:text="Time Expected"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_process"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tv_process"
-        app:layout_constraintTop_toBottomOf="@+id/tv_process" />
-
-    <TextView
-        android:id="@+id/tv_process"
+        android:id="@+id/tv_time_expected"
         android:layout_width="167dp"
         android:layout_height="32dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="Start Delivery"
+        android:text="Time Expected :"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_pickup"
@@ -103,5 +90,18 @@
         app:layout_constraintStart_toEndOf="@+id/iv_pickup"
         app:layout_constraintTop_toTopOf="@+id/iv_pickup"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="161dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="8dp"
+        android:text="20 minutes"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_time_expected"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_time_expected"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time_expected" />
 
 </android.support.constraint.ConstraintLayout>

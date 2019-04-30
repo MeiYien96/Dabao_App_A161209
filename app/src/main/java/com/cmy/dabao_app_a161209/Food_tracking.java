@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.directions.route.AbstractRouting;
@@ -31,6 +34,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,16 +49,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Food_tracking extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener, RoutingListener {
-    Button btnContact, btnReached;
+    Button btnContact;
+    TextView tvTime;
+    Integer timeLeft;
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
-    String orderUid,driverUid,from,to;
-    LatLng origin,destination;
+    String orderUid,driverUid,driverPhone;
+    LatLng hunterLatLng,driverLatLng;
+    Marker hunterMarker, driverMarker;
     private List<Polyline> polylines;
     private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,32 +69,64 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.hunter_map);
         mapFragment.getMapAsync(this);
+
+        tvTime = findViewById(R.id.tv_time);
         btnContact = findViewById(R.id.btn_contact);
         polylines = new ArrayList<>();
-        //btnReached = findViewById(R.id.btn_reached);
+        getDriverLocation();
 
-        /*btnReached.setOnClickListener(new View.OnClickListener() {
+        btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(Food_tracking.this);
-                builder.setCancelable(true);
-                builder.setTitle("Food Reached");
-                builder.setMessage("Hello, your food had reached, please take from driver!");
-                builder.setPositiveButton("Received", new DialogInterface.OnClickListener() {
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Order");
+                ref.orderByChild("hunterUid").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(Food_tracking.this, Thanks.class));
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                            orderUid = childSnapshot.getKey();
+                            final DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Order").child(orderUid);
+                            ref1.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    Order order = dataSnapshot.getValue(Order.class);
+                                    driverUid = order.getDriverUid();
+                                    DatabaseReference phone = FirebaseDatabase.getInstance().getReference().child("Users").child("Food Driver").child(driverUid);
+
+                                    phone.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            User user = dataSnapshot.getValue(User.class);
+                                            driverPhone = user.getPhone();
+                                            String url = "https://api.whatsapp.com/send?phone="+driverPhone;
+                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                            i.setData(Uri.parse(url));
+                                            startActivity(i);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
                 });
-                builder.setNegativeButton("Contact Driver", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(Food_tracking.this, Food_tracking.class));
-                    }
-                });
-                builder.show();
             }
-        });*/
+        });
+
     }
 
     private void getDriverLocation(){
@@ -104,11 +143,39 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Order order = dataSnapshot.getValue(Order.class);
                             driverUid = order.getDriverUid();
-                            from = order.getFrom();
-                            to = order.getTo();
-                            origin = getOrigin(from);
-                            destination =getDestination(to);
-                            getRouteToMarker(destination);
+                            DatabaseReference driverLocation = FirebaseDatabase.getInstance().getReference().child("DriversAvailableLocation").child(driverUid).child("l");
+
+                            driverLocation.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists()){
+                                        List<Object> map = (List<Object>) dataSnapshot.getValue();
+                                        double locationLat = 0;
+                                        double locationLng = 0;
+                                        if(map.get(0) != null){
+                                            locationLat = Double.parseDouble(map.get(0).toString());
+                                        }
+                                        if(map.get(1) != null){
+                                            locationLng = Double.parseDouble(map.get(1).toString());
+                                        }
+
+                                        if(driverMarker != null){
+                                            driverMarker.remove();
+                                        }
+                                        driverLatLng = new LatLng(locationLat,locationLng);
+                                        MarkerOptions driver = new MarkerOptions().position(driverLatLng).title("driver location");
+                                        driverMarker = mMap.addMarker(driver);
+                                        getRouteToMarker(driverLatLng);
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
                         }
 
                         @Override
@@ -123,93 +190,23 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
 
             }
         });
-        /*DatabaseReference locationref = FirebaseDatabase.getInstance().getReference().child("DriversAvailableLocation").child(driverUid).child("l");
-        locationref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    List<Object> obj = (List<Object>)dataSnapshot.getValue();
-                    double locationLat = 0;
-                    double locationLong = 0;
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
     }
 
-    private void getRouteToMarker(LatLng destination) {
+    private void getRouteToMarker(LatLng driverLatLng) {
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.DRIVING)
                 .withListener(this)
                 .alternativeRoutes(false)
-                .waypoints(origin, destination)
+                .waypoints(driverLatLng,hunterLatLng).key("AIzaSyAZbvhhZ0JJfBCHI4gB7lJJhCfzhUMCiLA")
                 .build();
         routing.execute();
-    }
-
-    private LatLng getDestination(String t) {
-        if(t.equals("Kolej Pendeta Za’ba")){
-            destination = new LatLng(2.919514,101.774489);
-        }
-        else if(t.equals("Kolej Burhanuddin Helmi")){
-            destination = new LatLng(2.927593,101.776949);
-        }
-        else if(t.equals("Kolej Keris Mas")){
-            destination = new LatLng(2.926817,101.789284);
-        }
-        else if(t.equals("Kolej Dato’Onn")){
-            destination = new LatLng(2.931418,101.780544);
-        }
-        else if(t.equals("Kolej Aminuddin Baki")){
-            destination = new LatLng(2.924733,101.783970);
-        }
-        else if(t.equals("Kolej Ungku Omar")){
-            destination = new LatLng(2.924727,101.779836);
-        }
-        else if(t.equals("Kolej Ibrahim Yaakub")){
-            destination = new LatLng(2.924536,101.778223);
-        }
-        else if(t.equals("Kolej Rahim Kajai")){
-            destination = new LatLng(2.932995,101.783355);
-        }
-        else if(t.equals("Kolej Ibu Zain")){
-            destination = new LatLng(2.930280,101.783127);
-        }
-        else if(t.equals("Kolej Tun Hussein Onn")){
-            destination = new LatLng(2.930255,101.779623);
-        }
-        return destination;
-    }
-
-    private LatLng getOrigin(String f) {
-        if(f.equals("Restoran Al Fariz Maju")){
-            origin = new LatLng(2.928220,101.767240);
-        }
-        else if (f.equals("大树下饭店 Kedai Makan Kita")){
-            origin = new LatLng(2.927330,101.768140);
-        }
-        else if (f.equals("Mohammad Chan Restaurant")){
-            origin = new LatLng(2.970819,101.776336);
-        }
-        else if (f.equals("Hot Meal Bar")){
-            origin = new LatLng(2.930770,101.776990);
-        }
-        else if (f.equals("Restaurant homst")){
-            origin = new LatLng(2.928190,101.767471);
-        }
-        return origin;
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(10000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
@@ -231,14 +228,15 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        if(hunterMarker != null){
+            hunterMarker.remove();
+        }
+        hunterLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(hunterLatLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        MarkerOptions hunter = new MarkerOptions().position(hunterLatLng).title("your location");
+        hunterMarker = mMap.addMarker(hunter);
 
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("HuntersAvailableLocation");
-        GeoFire geofire = new GeoFire(ref);
-        geofire.setLocation(userId, new GeoLocation(location.getLatitude(),location.getLongitude()));
     }
 
     @Override
@@ -259,10 +257,6 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
     @Override
     protected void onStop() {
         super.onStop();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("HuntersAvailableLocation");
-        GeoFire geofire = new GeoFire(ref);
-        geofire.removeLocation(userId);
     }
 
     @Override
@@ -292,16 +286,36 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
         for (int i = 0; i <route.size(); i++) {
 
             //In case of more than 5 alternative routes
-            int colorIndex = i % COLORS.length;
+            //int colorIndex = i % COLORS.length;
 
             PolylineOptions polyOptions = new PolylineOptions();
-            polyOptions.color(getResources().getColor(COLORS[colorIndex]));
+            polyOptions.color(Color.RED);
+            //polyOptions.color(getResources().getColor(COLORS[colorIndex]));
             polyOptions.width(10 + i * 3);
             polyOptions.addAll(route.get(i).getPoints());
             Polyline polyline = mMap.addPolyline(polyOptions);
             polylines.add(polyline);
+            timeLeft = (route.get(i).getDurationValue())/60;
+            tvTime.setText(timeLeft.toString()+" mins");
+            if(route.get(i).getDurationValue() <= 54){
+                erasePolylines();
+                final AlertDialog.Builder builder = new AlertDialog.Builder(Food_tracking.this);
+                builder.setCancelable(true);
+                builder.setTitle("Food Reached");
+                builder.setMessage("Hello, your food had reached, please take from driver!");
+                builder.setPositiveButton("Received", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //end();
+                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        FirebaseDatabase.getInstance().getReference("HunterRequest").child(userId).removeValue();
+                        startActivity(new Intent(Food_tracking.this, Thanks.class));
 
-            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.show();
+            }
+            //Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -309,5 +323,32 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onRoutingCancelled() {
 
+    }
+
+    private void erasePolylines(){
+        for(Polyline line : polylines){
+            line.remove();
+        }
+        polylines.clear();
+    }
+
+    private void end(){
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Order");
+        ref.orderByChild("hunterUid").equalTo(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    orderUid = childSnapshot.getKey();
+                    FirebaseDatabase.getInstance().getReference("Order").child(orderUid).removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
