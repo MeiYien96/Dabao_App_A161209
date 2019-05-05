@@ -16,7 +16,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Thanks extends AppCompatActivity {
     Button btnMainmenu,btnExit;
-    String orderUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,24 +34,7 @@ public class Thanks extends AppCompatActivity {
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Order");
-                ref.orderByChild("hunterUid").equalTo(userId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                            orderUid = childSnapshot.getKey();
-                            FirebaseDatabase.getInstance().getReference("Order").child(orderUid).removeValue();
-                            appExit();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                appExit();
             }
         });
     }

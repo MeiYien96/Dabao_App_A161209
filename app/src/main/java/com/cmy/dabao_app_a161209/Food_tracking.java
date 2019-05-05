@@ -135,12 +135,13 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
         ref.orderByChild("hunterUid").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                    for(DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     orderUid = childSnapshot.getKey();
                     final DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Order").child(orderUid);
                     ref1.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
                             Order order = dataSnapshot.getValue(Order.class);
                             driverUid = order.getDriverUid();
                             DatabaseReference driverLocation = FirebaseDatabase.getInstance().getReference().child("DriversAvailableLocation").child(driverUid).child("l");
@@ -148,21 +149,21 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
                             driverLocation.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.exists()){
+                                    if (dataSnapshot.exists()) {
                                         List<Object> map = (List<Object>) dataSnapshot.getValue();
                                         double locationLat = 0;
                                         double locationLng = 0;
-                                        if(map.get(0) != null){
+                                        if (map.get(0) != null) {
                                             locationLat = Double.parseDouble(map.get(0).toString());
                                         }
-                                        if(map.get(1) != null){
+                                        if (map.get(1) != null) {
                                             locationLng = Double.parseDouble(map.get(1).toString());
                                         }
 
-                                        if(driverMarker != null){
+                                        if (driverMarker != null) {
                                             driverMarker.remove();
                                         }
-                                        driverLatLng = new LatLng(locationLat,locationLng);
+                                        driverLatLng = new LatLng(locationLat, locationLng);
                                         MarkerOptions driver = new MarkerOptions().position(driverLatLng).title("driver location");
                                         driverMarker = mMap.addMarker(driver);
                                         getRouteToMarker(driverLatLng);
@@ -175,6 +176,7 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
 
                                 }
                             });
+                        }
 
                         }
 
@@ -308,6 +310,7 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
                     public void onClick(DialogInterface dialog, int which) {
                         //end();
                         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        FirebaseDatabase.getInstance().getReference("Order").child(orderUid).removeValue();
                         FirebaseDatabase.getInstance().getReference("HunterRequest").child(userId).removeValue();
                         startActivity(new Intent(Food_tracking.this, Thanks.class));
 
@@ -332,23 +335,4 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
         polylines.clear();
     }
 
-    private void end(){
-        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Order");
-        ref.orderByChild("hunterUid").equalTo(userId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    orderUid = childSnapshot.getKey();
-                    FirebaseDatabase.getInstance().getReference("Order").child(orderUid).removeValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 }

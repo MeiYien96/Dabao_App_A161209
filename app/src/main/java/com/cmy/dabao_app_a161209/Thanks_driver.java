@@ -23,5 +23,20 @@ public class Thanks_driver extends AppCompatActivity {
                 startActivity(new Intent(Thanks_driver.this, driver_mainmenu.class));
             }
         });
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appExit();
+            }
+        });
+    }
+
+    public void appExit () {
+        this.finish();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
