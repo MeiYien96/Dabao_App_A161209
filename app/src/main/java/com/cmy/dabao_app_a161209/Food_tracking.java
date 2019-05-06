@@ -207,7 +207,7 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
                 .travelMode(AbstractRouting.TravelMode.DRIVING)
                 .withListener(this)
                 .alternativeRoutes(false)
-                .waypoints(driverLatLng,hunterLatLng).key("AIzaSyAZbvhhZ0JJfBCHI4gB7lJJhCfzhUMCiLA")
+                .waypoints(driverLatLng,hunterLatLng).key("Enter key here")
                 .build();
         routing.execute();
     }
