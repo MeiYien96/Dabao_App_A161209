@@ -21,11 +21,15 @@
             "package_name": "com.cmy.dabao_app_a161209",
             "certificate_hash": "5d91f5a068abc6d8fe0cec70bd8c462a05aadf39"
           }
+        },
+        {
+          "client_id": "360734365424-9cf5qlmo4puui91tnfjbpbsgr6j2gnb3.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAby5AsC0ysJqq5V1-t6t7vXkRE8p-aayQ"
+          "current_key": "AIzaSyADCqxnLhw4bsdfJCI4Jnqy9Mh2x_Ni-tY"
         }
       ],
       "services": {

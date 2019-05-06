@@ -14,23 +14,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
-
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class Restaurant_adapter extends RecyclerView.Adapter<Restaurant_adapter.MyViewHolder> {
+public class Restaurant_adapter extends RecyclerView.Adapter<Restaurant_adapter.MyViewHolder>  {
 
     Context context;
     ArrayList<Restaurant_location> restaurant;
-    String driverUid,driverPhone;
+    String driverUid,driverPhone,hunterUsername;
+    StorageReference storageReference;
 
     public Restaurant_adapter(Context c, ArrayList<Restaurant_location> r){
         context = c;
@@ -49,11 +51,14 @@ public class Restaurant_adapter extends RecyclerView.Adapter<Restaurant_adapter.
         myViewHolder.RestaurantName.setText(restaurant.get(i).getRestaurantName());
         myViewHolder.FoodTag1.setText(restaurant.get(i).getFoodTag1());
         myViewHolder.FoodTag2.setText(restaurant.get(i).getFoodTag2());
+        storageReference = FirebaseStorage.getInstance().getReference("Profile_Picture");
+
         if(restaurant.get(i).getProfilePic()==null){
             myViewHolder.profilePic.setImageResource(R.drawable.ic_account_circle_black_24dp);
         }
         else{
-            Picasso.get().load(restaurant.get(i).getProfilePic()).into(myViewHolder.profilePic);
+            Glide.with(context).load(restaurant.get(i).getProfilePic()).placeholder(R.drawable.ic_account_circle_black_24dp)
+                    .into(myViewHolder.profilePic);
         }
         myViewHolder.onClick(i);
 
@@ -85,33 +90,86 @@ public class Restaurant_adapter extends RecyclerView.Adapter<Restaurant_adapter.
 
                     Toast.makeText(context, "Contact Driver "+restaurant.get(position).getUsername(), Toast.LENGTH_SHORT).show();
                     final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("DriversAvailable");
-                    myRef.orderByChild("username").equalTo(restaurant.get(position).getUsername()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    DatabaseReference hunterRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Food Hunter").child(userId);
+                    hunterRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                                driverUid = childSnapshot.getKey();
-                                Log.i(TAG,driverUid);
-                                FirebaseDatabase.getInstance().getReference().child("HunterRequest").child(userId).child("driverUid").setValue(driverUid);
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Food Driver").child(driverUid);
-                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        User user = dataSnapshot.getValue(User.class);
-                                        driverPhone = user.getPhone();
-                                        String url = "https://api.whatsapp.com/send?phone="+driverPhone;
-                                        Intent i = new Intent(Intent.ACTION_VIEW);
-                                        i.setData(Uri.parse(url));
-                                        context.startActivity(i);
+                            User user = dataSnapshot.getValue(User.class);
+                            hunterUsername = user.getUsername();
+
+                            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("DriversAvailable");
+                            myRef.orderByChild("username").equalTo(restaurant.get(position).getUsername()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                                        driverUid = childSnapshot.getKey();
+                                        Log.i(TAG,driverUid);
+                                        FirebaseDatabase.getInstance().getReference().child("HunterRequest").child(userId).child("driverUid").setValue(driverUid);
+                                        //multiuser
+                                        //DatabaseReference usernameRef = FirebaseDatabase.getInstance().getReference().child("DriversAvailable").child(userId).child("huntersHandle");
+                                        DatabaseReference usernameRef = FirebaseDatabase.getInstance().getReference();
+                                        usernameRef.child("DriversAvailable").child(userId).child("huntersHandle").addValueEventListener(new ValueEventListener() {
+                                        //usernameRef.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if(!dataSnapshot.hasChild(hunterUsername)){
+                                                    FirebaseDatabase.getInstance().getReference().child("DriversAvailable").child(driverUid).child("huntersHandle").child(userId).setValue(hunterUsername);
+                                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Food Driver").child(driverUid);
+                                                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            User user = dataSnapshot.getValue(User.class);
+                                                            driverPhone = user.getPhone();
+                                                            String url = "https://api.whatsapp.com/send?phone="+driverPhone;
+                                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                                            i.setData(Uri.parse(url));
+                                                            context.startActivity(i);
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+                                                }
+                                                else{
+                                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Food Driver").child(driverUid);
+                                                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            User user = dataSnapshot.getValue(User.class);
+                                                            driverPhone = user.getPhone();
+                                                            String url = "https://api.whatsapp.com/send?phone="+driverPhone;
+                                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                                            i.setData(Uri.parse(url));
+                                                            context.startActivity(i);
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+
                                     }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                }
 
-                                    }
-                                });
-                            }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                                }
+                            });
                         }
 
                         @Override
@@ -120,9 +178,12 @@ public class Restaurant_adapter extends RecyclerView.Adapter<Restaurant_adapter.
                         }
                     });
 
+
                 }
             });
+
         }
+
     }
 
 }

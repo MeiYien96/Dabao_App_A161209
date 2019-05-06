@@ -1,23 +1,13 @@
 package com.cmy.dabao_app_a161209;
 
 import android.Manifest;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,18 +20,16 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -52,18 +40,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import java.util.ArrayList;
 
 
 public class driver_mainmenu extends  AppCompatActivity
@@ -75,6 +54,7 @@ public class driver_mainmenu extends  AppCompatActivity
     Location mLastLocation;
     LocationRequest mLocationRequest;
     String username,selectedRestaurant,foodTag1,foodTag2,profilePic;
+    String [] huntersHandle;
     ActionBarDrawerToggle toggle;
 
     @Override
@@ -116,6 +96,7 @@ public class driver_mainmenu extends  AppCompatActivity
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             User user = dataSnapshot.getValue(User.class);
                             username = user.getUsername();
+                            profilePic = user.getProfilePic();
                             selectedRestaurant = String.valueOf(spinner.getSelectedItem());
                             if(selectedRestaurant.equals("Restoran Al Fariz Maju")){
                                 foodTag1 = "Indian Cuisine";
@@ -137,7 +118,8 @@ public class driver_mainmenu extends  AppCompatActivity
                                 foodTag1 = "Chinese Muslim";
                                 foodTag2 = "Halal";
                             }
-                            Restaurant_location restaurant_location = new Restaurant_location(username,selectedRestaurant,foodTag1,foodTag2,profilePic,btnOrder);
+
+                            Restaurant_location restaurant_location = new Restaurant_location(username,selectedRestaurant,foodTag1,foodTag2,profilePic, huntersHandle,btnOrder);
                             FirebaseDatabase.getInstance().getReference().child("DriversAvailable").child(userId).setValue(restaurant_location);
                             btnDelivery.setText("STOP DELIVERY");
                             click++;
@@ -166,8 +148,33 @@ public class driver_mainmenu extends  AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final TextView username = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_username);
+        final ImageView profilePicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.img_profilePic);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Users").child("Food Driver").child(userId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User driver = dataSnapshot.getValue(User.class);
+                username.setText(driver.getUsername());
+
+                if(driver.getProfilePic() == null){
+                    profilePicture.setImageResource(R.drawable.ic_account_circle_black_24dp);
+                }
+                else{
+                    Glide.with(driver_mainmenu.this)
+                            .load(driver.getProfilePic()).placeholder(R.drawable.ic_account_circle_black_24dp)
+                            .into(profilePicture);
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -260,10 +267,12 @@ public class driver_mainmenu extends  AppCompatActivity
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
 
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailableLocation");
         GeoFire geofire = new GeoFire(ref);
         geofire.setLocation(userId, new GeoLocation(location.getLatitude(),location.getLongitude()));
+        }
     }
 
     @Override
@@ -293,9 +302,11 @@ public class driver_mainmenu extends  AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailableLocation");
-        GeoFire geofire = new GeoFire(ref);
-        geofire.removeLocation(userId);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailableLocation");
+            GeoFire geofire = new GeoFire(ref);
+            geofire.removeLocation(userId);
+        }
     }
 }

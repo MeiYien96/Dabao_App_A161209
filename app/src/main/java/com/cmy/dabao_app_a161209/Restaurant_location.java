@@ -4,18 +4,20 @@ import android.widget.Button;
 
 public class Restaurant_location {
     String username,restaurantName,foodTag1,foodTag2,profilePic;
+    String [] hunterHandle;
     Button btnOrder;
 
     public Restaurant_location(){
 
     }
 
-    public Restaurant_location(String username, String restaurantName, String foodTag1, String foodTag2, String profilePic, Button btnOrder) {
+    public Restaurant_location(String username, String restaurantName, String foodTag1, String foodTag2, String profilePic, String[] huntersHandle, Button btnOrder) {
         this.username = username;
         this.restaurantName = restaurantName;
         this.foodTag1 = foodTag1;
         this.foodTag2 = foodTag2;
         this.profilePic = profilePic;
+        this.hunterHandle = huntersHandle;
         this.btnOrder = btnOrder;
     }
 
@@ -57,6 +59,14 @@ public class Restaurant_location {
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
+    }
+
+    public String[] getHunterHandle() {
+        return hunterHandle;
+    }
+
+    public void setHunterHandle(String[] hunterHandle) {
+        this.hunterHandle = hunterHandle;
     }
 
     public Button getBtnOrder() {

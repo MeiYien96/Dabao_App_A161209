@@ -3,8 +3,8 @@
     <string name="title_activity_hunter_mainmenu">hunter_mainmenu</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Connie1996</string>
-    <string name="nav_header_title2">Jason Tan</string>
+    <string name="nav_header_title">Hello User</string>
+    <string name="nav_header_title2">Hello User</string>
     <string name="action_settings">Settings</string>
     <string name="share_using">Contact driver by using</string>
     <string name="title_activity_driver_mainmenu">driver_mainmenu</string>

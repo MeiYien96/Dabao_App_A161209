@@ -23,8 +23,6 @@ import com.directions.route.Route;
 import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
-import com.firebase.geofire.GeoFire;
-import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -49,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Food_tracking extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener, RoutingListener {
-    Button btnContact;
+    Button btnContact, btnReceived;
     TextView tvTime;
     Integer timeLeft;
     private GoogleMap mMap;
@@ -72,6 +70,7 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
 
         tvTime = findViewById(R.id.tv_time);
         btnContact = findViewById(R.id.btn_contact);
+        btnReceived = findViewById(R.id.btn_received);
         polylines = new ArrayList<>();
         getDriverLocation();
 
@@ -127,6 +126,15 @@ public class Food_tracking extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
+        btnReceived.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                FirebaseDatabase.getInstance().getReference("Order").child(orderUid).removeValue();
+                FirebaseDatabase.getInstance().getReference("HunterRequest").child(userId).removeValue();
+                startActivity(new Intent(Food_tracking.this, Thanks.class));
+            }
+        });
     }
 
     private void getDriverLocation(){

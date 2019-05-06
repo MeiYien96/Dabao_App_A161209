@@ -30,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -106,7 +107,32 @@ public class hunter_mainmenu extends AppCompatActivity implements AdapterView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final TextView username = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_username);
+        final ImageView profilePicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.img_profilePic);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Users").child("Food Hunter").child(userId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User driver = dataSnapshot.getValue(User.class);
+                username.setText(driver.getUsername());
+
+                if(driver.getProfilePic() == null){
+                    profilePicture.setImageResource(R.drawable.ic_account_circle_black_24dp);
+                }
+                else{
+                    Glide.with(hunter_mainmenu.this)
+                            .load(driver.getProfilePic()).placeholder(R.drawable.ic_account_circle_black_24dp)
+                            .into(profilePicture);
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -118,7 +144,7 @@ public class hunter_mainmenu extends AppCompatActivity implements AdapterView.On
                         Intent intent = new Intent(hunter_mainmenu.this, Hunter_Setting.class);
                         startActivity(intent);
                         break;
-                    case R.id.nav_behunter:
+                    case R.id.nav_bedriver:
                         FirebaseAuth.getInstance().signOut();
                         Intent in = new Intent(hunter_mainmenu.this, signup.class);
                         startActivity(in);
